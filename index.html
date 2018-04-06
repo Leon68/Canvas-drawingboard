@@ -3,36 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <title>canvas-drawingboard</title>
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <style>
     * {
       margin: 0;
       padding: 0;
     }
-    #app {
-      height: 100vh;
+    #canvas {
+      display: block;
       background: #ddd;
     }
   </style>
 </head>
 <body>
-  <div id="app"></div>
+  <canvas id="canvas"></canvas>
 <script>
-  let app = document.querySelector('#app')
-app.addEventListener('touchStart', function(e){
+  let canvas = document.querySelector('#canvas')
+  let clientWidth = document.documentElement.clientWidth
+  let clientHeight = document.documentElement.clientHeight
+  canvas.width = clientWidth
+  canvas.height = clientHeight
+  let previousPoint 
+
+  let context = canvas.getContext('2d') 
+
+canvas.addEventListener('touchmove', function(e){
   console.log(e)
   let {pageX, pageY} = e.touches[0]
-  let div = document.createElement('div')
-  div.style.positon = 'absolute'
-  div.style.top = pageY + 'px'
-  div.style.left = pageX + 'px'
-  div.style.width = '4px'
-  div.style.height = '4px'
-  div.style.borderRadius = '2px'
-  div.style.backgroundColor = 'red'
-  document.body.appendChild(div)
+
+  if(previousPoint) {
+    context.lineWidth = 4
+    context.strokeStyle = 'green'
+    context.beginPath()
+    context.moveTo(previousPoint.pageX, previousPoint.pageY)//移动到上一个点
+    context.lineTo(pageX, pageY)//划线到当前点
+    context.stroke()
+  }
+//记录当前点坐标作为下个点的前一个点使用
+  previousPoint = {
+    pageX, pageY
+  }
 })
-app.addEventListener('touchend',function(){
-  console.log('没摸了')
+canvas.addEventListener('touchend', function(){
+  previousPoint = null
 })
 </script>
 </body>
