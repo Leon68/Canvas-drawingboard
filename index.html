@@ -13,9 +13,20 @@
       display: block;
       background: #ddd;
     }
+    #actions {
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 4px;
+      width: 100%;
+    }
   </style>
 </head>
 <body>
+  <div id="actions">
+    <label><input type="radio" name="penType" value="pen" checked>笔</label>
+    <label><input type="radio" name="penType" value="eraser">橡皮擦</label>
+  </div>
   <canvas id="canvas"></canvas>
 <script>
   let canvas = document.querySelector('#canvas')
@@ -30,18 +41,22 @@
 canvas.addEventListener('touchmove', function(e){
   console.log(e)
   let {pageX, pageY} = e.touches[0]
-
-  if(previousPoint) {
-    context.lineWidth = 4
-    context.strokeStyle = 'green'
-    context.beginPath()
-    context.moveTo(previousPoint.pageX, previousPoint.pageY)//移动到上一个点
-    context.lineTo(pageX, pageY)//划线到当前点
-    context.stroke()
-  }
-//记录当前点坐标作为下个点的前一个点使用
-  previousPoint = {
-    pageX, pageY
+  let penType = document.querySelector('input[name="penType"]:checked').value
+  if (penType === 'pen') {
+    if(previousPoint) {
+      context.lineWidth = 4
+      context.strokeStyle = 'green'
+      context.beginPath()
+      context.moveTo(previousPoint.pageX, previousPoint.pageY)//移动到上一个点
+      context.lineTo(pageX, pageY)//划线到当前点
+      context.stroke()
+    }
+  //记录当前点坐标作为下个点的前一个点使用
+    previousPoint = {
+      pageX, pageY
+    }
+  }else if(penType === 'eraser'){
+    context.clearRect(pageX-8, pageY-8, 16, 16)
   }
 })
 canvas.addEventListener('touchend', function(){
