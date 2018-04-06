@@ -26,6 +26,7 @@
   <div id="actions">
     <label><input type="radio" name="penType" value="pen" checked>笔</label>
     <label><input type="radio" name="penType" value="eraser">橡皮擦</label>
+    <button class="save">保存</button>
   </div>
   <canvas id="canvas"></canvas>
 <script>
@@ -39,7 +40,7 @@
   let context = canvas.getContext('2d') 
 
 canvas.addEventListener('touchmove', function(e){
-  console.log(e)
+  e.preventDefault()
   let {pageX, pageY} = e.touches[0]
   let penType = document.querySelector('input[name="penType"]:checked').value
   if (penType === 'pen') {
@@ -62,6 +63,13 @@ canvas.addEventListener('touchmove', function(e){
 canvas.addEventListener('touchend', function(){
   previousPoint = null
 })
+
+let save = document.querySelector('.save')
+save.onclick = function(){
+  let data = canvas.toDataURL("image/png")
+  let newWindow = window.open('about:blank', 'image from canvas')
+  newWindow.document.write("<img src='"+data+"' alt=from canvas'/>")
+}
 </script>
 </body>
 </html>
