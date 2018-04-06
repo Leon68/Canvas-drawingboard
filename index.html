@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>canvas-drawingboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    #app {
+      height: 100vh;
+      background: #ddd;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+<script>
+  let app = document.querySelector('#app')
+app.addEventListener('touchStart', function(e){
+  console.log(e)
+  let {pageX, pageY} = e.touches[0]
+  let div = document.createElement('div')
+  div.style.positon = 'absolute'
+  div.style.top = pageY + 'px'
+  div.style.left = pageX + 'px'
+  div.style.width = '4px'
+  div.style.height = '4px'
+  div.style.borderRadius = '2px'
+  div.style.backgroundColor = 'red'
+  document.body.appendChild(div)
+})
+app.addEventListener('touchend',function(){
+  console.log('没摸了')
+})
+</script>
+</body>
+</html>
